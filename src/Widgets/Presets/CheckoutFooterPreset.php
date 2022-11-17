@@ -1,6 +1,6 @@
 <?php
 
-namespace Waldorfshop5\Widgets\Presets;
+namespace Waldorfshop6\Widgets\Presets;
 
 use Ceres\Config\CeresConfig;
 use Ceres\Widgets\Helper\PresetHelper;
@@ -20,7 +20,7 @@ class CheckoutFooterPreset implements ContentPreset
         $preset = pluginApp(PresetHelper::class);
 
 
-        $preset->createWidget("Waldorfshop5::FooterListWidget")
+        $preset->createWidget("Waldorfshop6::FooterListWidget")
                ->withSetting("displayInline", true)
                ->withSetting("entries", [
                    [
@@ -47,7 +47,7 @@ class CheckoutFooterPreset implements ContentPreset
                ]);
 
 
-        $preset->createWidget("Waldorfshop5::ImageListWidget")
+        $preset->createWidget("Waldorfshop6::ImageListWidget")
                ->withSetting("entries", []);
 
         return $preset->toArray();

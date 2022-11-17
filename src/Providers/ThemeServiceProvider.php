@@ -1,5 +1,5 @@
 <?php
-namespace Waldorfshop5\Providers;
+namespace Waldorfshop6\Providers;
 use IO\Helper\ResourceContainer;
 use Plenty\Modules\Webshop\Template\Providers\TemplateServiceProvider;
 use Plenty\Modules\ContentCache\Contracts\ContentCacheQueryParamsRepositoryContract;
@@ -10,7 +10,7 @@ use IO\Helper\ComponentContainer;
 
 /**
  * Class ThemeServiceProvider
- * @package Waldorfshop5\Providers
+ * @package Waldorfshop6\Providers
  */
 class ThemeServiceProvider extends TemplateServiceProvider
 {
@@ -23,21 +23,21 @@ class ThemeServiceProvider extends TemplateServiceProvider
 
     public function boot(Twig $twig, Dispatcher $dispatcher, ConfigRepository $config)
     {
-        $this->overrideTemplate('Ceres::PageDesign.PageDesign', 'Waldorfshop5::PageDesign.PageDesign');
-        $this->overrideTemplate('Ceres::PageDesign.Partials.Footer', 'Waldorfshop5::PageDesign.Partials.Footer');
-        $this->overrideTemplate('Ceres::PageDesign.Partials.Head', 'Waldorfshop5::PageDesign.Partials.Head');
-        $this->overrideTemplate('Ceres::Widgets.Header.TopBarWidget', 'Waldorfshop5::Widgets.Header.TopBarWidget');
+        $this->overrideTemplate('Ceres::PageDesign.PageDesign', 'Waldorfshop6::PageDesign.PageDesign');
+        $this->overrideTemplate('Ceres::PageDesign.Partials.Footer', 'Waldorfshop6::PageDesign.Partials.Footer');
+        $this->overrideTemplate('Ceres::PageDesign.Partials.Head', 'Waldorfshop6::PageDesign.Partials.Head');
+        $this->overrideTemplate('Ceres::Widgets.Header.TopBarWidget', 'Waldorfshop6::Widgets.Header.TopBarWidget');
 
         $dispatcher->listen("IO.Resources.Import", function(ResourceContainer $container)
         {
-            $container->addScriptTemplate('Waldorfshop5::ItemList.Components.CategoryItem');
+            $container->addScriptTemplate('Waldorfshop6::ItemList.Components.CategoryItem');
         },0);
 
         $dispatcher->listen('IO.Component.Import', function (ComponentContainer $container)
         {
             if ($container->getOriginComponentTemplate()=='Ceres::Customer.Components.UserLoginHandler')
             {
-                $container->setNewComponentTemplate('Waldorfshop5::Customer.Components.UserLoginHandler');
+                $container->setNewComponentTemplate('Waldorfshop6::Customer.Components.UserLoginHandler');
             }
         }, self::PRIORITY);
 

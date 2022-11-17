@@ -12626,10 +12626,10 @@ module.exports = function (exec, SKIP_CLOSING) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var uncurryThisRaw = __webpack_require__(/*! ../internals/function-uncurry-this-raw */ "./node_modules/core-js/internals/function-uncurry-this-raw.js");
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
 
-var toString = uncurryThisRaw({}.toString);
-var stringSlice = uncurryThisRaw(''.slice);
+var toString = uncurryThis({}.toString);
+var stringSlice = uncurryThis(''.slice);
 
 module.exports = function (it) {
   return stringSlice(toString(it), 8, -1);
@@ -13704,7 +13704,7 @@ module.exports = function (exec) {
 
 // TODO: Remove from `core-js@4` since it's moved to entry points
 __webpack_require__(/*! ../modules/es.regexp.exec */ "./node_modules/core-js/modules/es.regexp.exec.js");
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this-clause */ "./node_modules/core-js/internals/function-uncurry-this-clause.js");
 var defineBuiltIn = __webpack_require__(/*! ../internals/define-built-in */ "./node_modules/core-js/internals/define-built-in.js");
 var regexpExec = __webpack_require__(/*! ../internals/regexp-exec */ "./node_modules/core-js/internals/regexp-exec.js");
 var fails = __webpack_require__(/*! ../internals/fails */ "./node_modules/core-js/internals/fails.js");
@@ -13824,7 +13824,7 @@ module.exports = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND ? c
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this-clause */ "./node_modules/core-js/internals/function-uncurry-this-clause.js");
 var aCallable = __webpack_require__(/*! ../internals/a-callable */ "./node_modules/core-js/internals/a-callable.js");
 var NATIVE_BIND = __webpack_require__(/*! ../internals/function-bind-native */ "./node_modules/core-js/internals/function-bind-native.js");
 
@@ -13906,10 +13906,30 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/core-js/internals/function-uncurry-this-raw.js":
-/*!*********************************************************************!*\
-  !*** ./node_modules/core-js/internals/function-uncurry-this-raw.js ***!
-  \*********************************************************************/
+/***/ "./node_modules/core-js/internals/function-uncurry-this-clause.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/core-js/internals/function-uncurry-this-clause.js ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var classofRaw = __webpack_require__(/*! ../internals/classof-raw */ "./node_modules/core-js/internals/classof-raw.js");
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
+
+module.exports = function (fn) {
+  // Nashorn bug:
+  //   https://github.com/zloirock/core-js/issues/1128
+  //   https://github.com/zloirock/core-js/issues/1130
+  if (classofRaw(fn) === 'Function') return uncurryThis(fn);
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/internals/function-uncurry-this.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/core-js/internals/function-uncurry-this.js ***!
+  \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13923,26 +13943,6 @@ module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
   return function () {
     return call.apply(fn, arguments);
   };
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/internals/function-uncurry-this.js":
-/*!*****************************************************************!*\
-  !*** ./node_modules/core-js/internals/function-uncurry-this.js ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var classofRaw = __webpack_require__(/*! ../internals/classof-raw */ "./node_modules/core-js/internals/classof-raw.js");
-var uncurryThisRaw = __webpack_require__(/*! ../internals/function-uncurry-this-raw */ "./node_modules/core-js/internals/function-uncurry-this-raw.js");
-
-module.exports = function (fn) {
-  // Nashorn bug:
-  //   https://github.com/zloirock/core-js/issues/1128
-  //   https://github.com/zloirock/core-js/issues/1130
-  if (classofRaw(fn) === 'Function') return uncurryThisRaw(fn);
 };
 
 
@@ -16686,10 +16686,10 @@ var store = __webpack_require__(/*! ../internals/shared-store */ "./node_modules
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.26.0',
+  version: '3.26.1',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.26.0/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.26.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -17706,7 +17706,7 @@ addToUnscopables('includes');
 
 /* eslint-disable es/no-array-prototype-indexof -- required for testing */
 var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this-clause */ "./node_modules/core-js/internals/function-uncurry-this-clause.js");
 var $indexOf = __webpack_require__(/*! ../internals/array-includes */ "./node_modules/core-js/internals/array-includes.js").indexOf;
 var arrayMethodIsStrict = __webpack_require__(/*! ../internals/array-method-is-strict */ "./node_modules/core-js/internals/array-method-is-strict.js");
 
@@ -20193,7 +20193,7 @@ fixRegExpWellKnownSymbolLogic('split', function (SPLIT, nativeSplit, maybeCallNa
 "use strict";
 
 var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this-clause */ "./node_modules/core-js/internals/function-uncurry-this-clause.js");
 var getOwnPropertyDescriptor = __webpack_require__(/*! ../internals/object-get-own-property-descriptor */ "./node_modules/core-js/internals/object-get-own-property-descriptor.js").f;
 var toLength = __webpack_require__(/*! ../internals/to-length */ "./node_modules/core-js/internals/to-length.js");
 var toString = __webpack_require__(/*! ../internals/to-string */ "./node_modules/core-js/internals/to-string.js");
@@ -45071,11 +45071,6 @@ function normalizeComponent(
 	    });
 	});
 
-	var rawMap = new WeakMap();
-	function isReadonly(value) {
-	    return !!(value && value.__v_isReadonly);
-	}
-
 	var arrayKeys = Object.getOwnPropertyNames(arrayMethods);
 	var NO_INIITIAL_VALUE = {};
 	/**
@@ -45165,7 +45160,6 @@ function normalizeComponent(
 	        (isArray(value) || isPlainObject(value)) &&
 	        Object.isExtensible(value) &&
 	        !value.__v_skip /* ReactiveFlags.SKIP */ &&
-	        !rawMap.has(value) &&
 	        !isRef(value) &&
 	        !(value instanceof VNode)) {
 	        return new Observer(value, shallow, ssrMockReactivity);
@@ -45303,6 +45297,10 @@ function normalizeComponent(
 	            dependArray(e);
 	        }
 	    }
+	}
+
+	function isReadonly(value) {
+	    return !!(value && value.__v_isReadonly);
 	}
 
 	function isRef(r) {
@@ -46887,7 +46885,8 @@ function normalizeComponent(
 	/**
 	 * Helper that recursively merges two data objects together.
 	 */
-	function mergeData(to, from) {
+	function mergeData(to, from, recursive) {
+	    if (recursive === void 0) { recursive = true; }
 	    if (!from)
 	        return to;
 	    var key, toVal, fromVal;
@@ -46901,7 +46900,7 @@ function normalizeComponent(
 	            continue;
 	        toVal = to[key];
 	        fromVal = from[key];
-	        if (!hasOwn(to, key)) {
+	        if (!recursive || !hasOwn(to, key)) {
 	            set(to, key, fromVal);
 	        }
 	        else if (toVal !== fromVal &&
@@ -47061,7 +47060,19 @@ function normalizeComponent(
 	                        extend(ret, childVal);
 	                    return ret;
 	                };
-	strats.provide = mergeDataOrFn;
+	strats.provide = function (parentVal, childVal) {
+	    if (!parentVal)
+	        return childVal;
+	    return function () {
+	        var ret = Object.create(null);
+	        mergeData(ret, isFunction(parentVal) ? parentVal.call(this) : parentVal);
+	        if (childVal) {
+	            mergeData(ret, isFunction(childVal) ? childVal.call(this) : childVal, false // non-recursive
+	            );
+	        }
+	        return ret;
+	    };
+	};
 	/**
 	 * Default strategy.
 	 */
@@ -49878,7 +49889,7 @@ function normalizeComponent(
 	        !el.key) {
 	        state.warn("<".concat(el.tag, " v-for=\"").concat(alias, " in ").concat(exp, "\">: component lists rendered with ") +
 	            "v-for should have explicit keys. " +
-	            "See https://vuejs.org/guide/list.html#key for more info.", el.rawAttrsMap['v-for'], true /* tip */);
+	            "See https://v2.vuejs.org/v2/guide/list.html#key for more info.", el.rawAttrsMap['v-for'], true /* tip */);
 	    }
 	    el.forProcessed = true; // avoid recursion
 	    return ("".concat(altHelper || '_l', "((").concat(exp, "),") +
@@ -51015,7 +51026,7 @@ function normalizeComponent(
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
- * Vue.js v2.7.13
+ * Vue.js v2.7.14
  * (c) 2014-2022 Evan You
  * Released under the MIT License.
  */
@@ -51896,77 +51907,6 @@ function normalizeComponent(
       });
   });
 
-  var rawMap = new WeakMap();
-  function reactive(target) {
-      makeReactive(target, false);
-      return target;
-  }
-  /**
-   * Return a shallowly-reactive copy of the original object, where only the root
-   * level properties are reactive. It also does not auto-unwrap refs (even at the
-   * root level).
-   */
-  function shallowReactive(target) {
-      makeReactive(target, true);
-      def(target, "__v_isShallow" /* ReactiveFlags.IS_SHALLOW */, true);
-      return target;
-  }
-  function makeReactive(target, shallow) {
-      // if trying to observe a readonly proxy, return the readonly version.
-      if (!isReadonly(target)) {
-          {
-              if (isArray(target)) {
-                  warn$2("Avoid using Array as root value for ".concat(shallow ? "shallowReactive()" : "reactive()", " as it cannot be tracked in watch() or watchEffect(). Use ").concat(shallow ? "shallowRef()" : "ref()", " instead. This is a Vue-2-only limitation."));
-              }
-              var existingOb = target && target.__ob__;
-              if (existingOb && existingOb.shallow !== shallow) {
-                  warn$2("Target is already a ".concat(existingOb.shallow ? "" : "non-", "shallow reactive object, and cannot be converted to ").concat(shallow ? "" : "non-", "shallow."));
-              }
-          }
-          var ob = observe(target, shallow, isServerRendering() /* ssr mock reactivity */);
-          if (!ob) {
-              if (target == null || isPrimitive(target)) {
-                  warn$2("value cannot be made reactive: ".concat(String(target)));
-              }
-              if (isCollectionType(target)) {
-                  warn$2("Vue 2 does not support reactive collection types such as Map or Set.");
-              }
-          }
-      }
-  }
-  function isReactive(value) {
-      if (isReadonly(value)) {
-          return isReactive(value["__v_raw" /* ReactiveFlags.RAW */]);
-      }
-      return !!(value && value.__ob__);
-  }
-  function isShallow(value) {
-      return !!(value && value.__v_isShallow);
-  }
-  function isReadonly(value) {
-      return !!(value && value.__v_isReadonly);
-  }
-  function isProxy(value) {
-      return isReactive(value) || isReadonly(value);
-  }
-  function toRaw(observed) {
-      var raw = observed && observed["__v_raw" /* ReactiveFlags.RAW */];
-      return raw ? toRaw(raw) : observed;
-  }
-  function markRaw(value) {
-      if (isObject(value)) {
-          rawMap.set(value, true);
-      }
-      return value;
-  }
-  /**
-   * @internal
-   */
-  function isCollectionType(value) {
-      var type = toRawType(value);
-      return (type === 'Map' || type === 'WeakMap' || type === 'Set' || type === 'WeakSet');
-  }
-
   var arrayKeys = Object.getOwnPropertyNames(arrayMethods);
   var NO_INIITIAL_VALUE = {};
   /**
@@ -52056,7 +51996,6 @@ function normalizeComponent(
           (isArray(value) || isPlainObject(value)) &&
           Object.isExtensible(value) &&
           !value.__v_skip /* ReactiveFlags.SKIP */ &&
-          !rawMap.has(value) &&
           !isRef(value) &&
           !(value instanceof VNode)) {
           return new Observer(value, shallow, ssrMockReactivity);
@@ -52229,6 +52168,77 @@ function normalizeComponent(
       }
   }
 
+  function reactive(target) {
+      makeReactive(target, false);
+      return target;
+  }
+  /**
+   * Return a shallowly-reactive copy of the original object, where only the root
+   * level properties are reactive. It also does not auto-unwrap refs (even at the
+   * root level).
+   */
+  function shallowReactive(target) {
+      makeReactive(target, true);
+      def(target, "__v_isShallow" /* ReactiveFlags.IS_SHALLOW */, true);
+      return target;
+  }
+  function makeReactive(target, shallow) {
+      // if trying to observe a readonly proxy, return the readonly version.
+      if (!isReadonly(target)) {
+          {
+              if (isArray(target)) {
+                  warn$2("Avoid using Array as root value for ".concat(shallow ? "shallowReactive()" : "reactive()", " as it cannot be tracked in watch() or watchEffect(). Use ").concat(shallow ? "shallowRef()" : "ref()", " instead. This is a Vue-2-only limitation."));
+              }
+              var existingOb = target && target.__ob__;
+              if (existingOb && existingOb.shallow !== shallow) {
+                  warn$2("Target is already a ".concat(existingOb.shallow ? "" : "non-", "shallow reactive object, and cannot be converted to ").concat(shallow ? "" : "non-", "shallow."));
+              }
+          }
+          var ob = observe(target, shallow, isServerRendering() /* ssr mock reactivity */);
+          if (!ob) {
+              if (target == null || isPrimitive(target)) {
+                  warn$2("value cannot be made reactive: ".concat(String(target)));
+              }
+              if (isCollectionType(target)) {
+                  warn$2("Vue 2 does not support reactive collection types such as Map or Set.");
+              }
+          }
+      }
+  }
+  function isReactive(value) {
+      if (isReadonly(value)) {
+          return isReactive(value["__v_raw" /* ReactiveFlags.RAW */]);
+      }
+      return !!(value && value.__ob__);
+  }
+  function isShallow(value) {
+      return !!(value && value.__v_isShallow);
+  }
+  function isReadonly(value) {
+      return !!(value && value.__v_isReadonly);
+  }
+  function isProxy(value) {
+      return isReactive(value) || isReadonly(value);
+  }
+  function toRaw(observed) {
+      var raw = observed && observed["__v_raw" /* ReactiveFlags.RAW */];
+      return raw ? toRaw(raw) : observed;
+  }
+  function markRaw(value) {
+      // non-extensible objects won't be observed anyway
+      if (Object.isExtensible(value)) {
+          def(value, "__v_skip" /* ReactiveFlags.SKIP */, true);
+      }
+      return value;
+  }
+  /**
+   * @internal
+   */
+  function isCollectionType(value) {
+      var type = toRawType(value);
+      return (type === 'Map' || type === 'WeakMap' || type === 'Set' || type === 'WeakSet');
+  }
+
   /**
    * @internal
    */
@@ -52364,8 +52374,8 @@ function normalizeComponent(
       return ref;
   }
 
-  var rawToReadonlyMap = new WeakMap();
-  var rawToShallowReadonlyMap = new WeakMap();
+  var rawToReadonlyFlag = "__v_rawToReadonly";
+  var rawToShallowReadonlyFlag = "__v_rawToShallowReadonly";
   function readonly(target) {
       return createReadonly(target, false);
   }
@@ -52384,18 +52394,21 @@ function normalizeComponent(
           }
           return target;
       }
+      if (!Object.isExtensible(target)) {
+          warn$2("Vue 2 does not support creating readonly proxy for non-extensible object.");
+      }
       // already a readonly object
       if (isReadonly(target)) {
           return target;
       }
       // already has a readonly proxy
-      var map = shallow ? rawToShallowReadonlyMap : rawToReadonlyMap;
-      var existingProxy = map.get(target);
+      var existingFlag = shallow ? rawToShallowReadonlyFlag : rawToReadonlyFlag;
+      var existingProxy = target[existingFlag];
       if (existingProxy) {
           return existingProxy;
       }
       var proxy = Object.create(Object.getPrototypeOf(target));
-      map.set(target, proxy);
+      def(target, existingFlag, proxy);
       def(proxy, "__v_isReadonly" /* ReactiveFlags.IS_READONLY */, true);
       def(proxy, "__v_raw" /* ReactiveFlags.RAW */, target);
       if (isRef(target)) {
@@ -55009,7 +55022,7 @@ function normalizeComponent(
   /**
    * Note: also update dist/vue.runtime.mjs when adding new exports to this file.
    */
-  var version = '2.7.13';
+  var version = '2.7.14';
   /**
    * @internal type is manually declared in <root>/types/v3-define-component.d.ts
    */
@@ -56211,7 +56224,8 @@ function normalizeComponent(
   /**
    * Helper that recursively merges two data objects together.
    */
-  function mergeData(to, from) {
+  function mergeData(to, from, recursive) {
+      if (recursive === void 0) { recursive = true; }
       if (!from)
           return to;
       var key, toVal, fromVal;
@@ -56225,7 +56239,7 @@ function normalizeComponent(
               continue;
           toVal = to[key];
           fromVal = from[key];
-          if (!hasOwn(to, key)) {
+          if (!recursive || !hasOwn(to, key)) {
               set(to, key, fromVal);
           }
           else if (toVal !== fromVal &&
@@ -56385,7 +56399,19 @@ function normalizeComponent(
                           extend(ret, childVal);
                       return ret;
                   };
-  strats.provide = mergeDataOrFn;
+  strats.provide = function (parentVal, childVal) {
+      if (!parentVal)
+          return childVal;
+      return function () {
+          var ret = Object.create(null);
+          mergeData(ret, isFunction(parentVal) ? parentVal.call(this) : parentVal);
+          if (childVal) {
+              mergeData(ret, isFunction(childVal) ? childVal.call(this) : childVal, false // non-recursive
+              );
+          }
+          return ret;
+      };
+  };
   /**
    * Default strategy.
    */
@@ -62139,7 +62165,7 @@ function normalizeComponent(
           !el.key) {
           state.warn("<".concat(el.tag, " v-for=\"").concat(alias, " in ").concat(exp, "\">: component lists rendered with ") +
               "v-for should have explicit keys. " +
-              "See https://vuejs.org/guide/list.html#key for more info.", el.rawAttrsMap['v-for'], true /* tip */);
+              "See https://v2.vuejs.org/v2/guide/list.html#key for more info.", el.rawAttrsMap['v-for'], true /* tip */);
       }
       el.forProcessed = true; // avoid recursion
       return ("".concat(altHelper || '_l', "((").concat(exp, "),") +

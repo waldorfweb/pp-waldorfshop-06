@@ -1,6 +1,6 @@
 <?php
 
-namespace Waldorfshop5\Widgets\Presets;
+namespace Waldorfshop6\Widgets\Presets;
 
 use Ceres\Config\CeresConfig;
 use Ceres\Widgets\Helper\PresetHelper;
@@ -27,7 +27,7 @@ class DefaultHeaderPreset implements ContentPreset
         if (strpos($companyLogo, 'http') !== 0 && strpos($companyLogo, 'layout/') !== 0) {
             $companyLogo = pluginApp(Application::class)->getUrlPath('Ceres') . '/' . $companyLogo;
         }
-        $preset->createWidget("Waldorfshop5::HeaderWidget")
+        $preset->createWidget("Waldorfshop6::HeaderWidget")
                ->withSetting("enableLanguageSelect", true)
                ->withSetting("enableShippingCountrySelect", true)
                ->withSetting("enableCurrencySelect", true)
