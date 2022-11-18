@@ -409,8 +409,8 @@ $(window).on("load", function() {
         });
     }
 
-    $window.on('scroll resize', checkIfInView);
-    $window.trigger('scroll');
+    //$window.on('scroll resize', checkIfInView);
+    //$window.trigger('scroll');
 
     /// is in Viewport ende
 
